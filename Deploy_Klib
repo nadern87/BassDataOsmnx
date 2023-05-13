@@ -1,0 +1,90 @@
+# %%
+# Package for data science
+import pandas as pd
+import numpy as np
+
+# Package for visualisation
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# Packages for machine learning
+from sklearn.preprocessing import LabelEncoder
+from sklearn.preprocessing import StandardScaler
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+from sklearn.linear_model import LinearRegression
+from sklearn.linear_model import Ridge
+from sklearn.linear_model import Lasso
+from sklearn.linear_model import SGDRegressor
+from sklearn.linear_model import BayesianRidge
+from sklearn.ensemble import RandomForestRegressor
+from sklearn.tree import DecisionTreeRegressor
+from sklearn.ensemble import GradientBoostingRegressor
+from sklearn.ensemble import StackingRegressor
+
+# Others
+import warnings
+warnings.filterwarnings("ignore")
+
+# %%
+data = pd.read_csv('Bass_BigTable.csv')
+data
+
+# %%
+data.describe()
+
+# %%
+
+
+# %% [markdown]
+# ## Deploying Klib Library
+# klib is a Python library for importing, cleaning, analyzing and preprocessing data. Future versions will include model creation and optimization to provide an end-to-end solution.
+
+# %%
+%pip install klib
+
+# %% [markdown]
+# ### Missing Value Plot
+# This plot visualizes the missing values in a dataset. At the top it shows the aggregate for each column using a relative scale and absolute missing-value annotations, while on the right, summary statistics and individual row results are displayed. Using this plot allows to gain a quick overview over the structure of missing values and their relation in a dataset and easily determine which columns and rows to investigate / drop.
+
+# %%
+import klib
+klib.missingval_plot(data) # default representation of missing values, other settings such as sorting are available
+
+# %% [markdown]
+# ### Data Cleaning
+# This is achieved by dropping empty and single valued columns as well as empty and duplicate rows (neither found in this example). Additionally, the optimal data types are inferred and applied, which also increases memory efficiency. This kind of reduction is not uncommon. For larger datasets the reduction in size often surpasses 90%.
+
+# %%
+data_cleaned = klib.data_cleaning(data)
+
+# %% [markdown]
+# ### Correlation Plots
+# This plot visualizes the correlation between different features. Settings include the possibility to only display positive, negative, high or low correlations as well as specify an additional threshold.
+
+# %%
+klib.corr_plot(data_cleaned,annot=False)
+
+# %%
+klib.corr_plot(data_cleaned, split='pos') # displaying only positive correlations, other settings include threshold, cmap...
+klib.corr_plot(data_cleaned, split='neg') # displaying only negative correlations
+
+# %%
+klib.corr_plot(data_cleaned, target='price') # default representation of correlations with the feature column
+
+
+# %%
+corr_matrix = klib.corr_mat(data) # default representation of a correlation matrix
+corr_matrix
+
+# %% [markdown]
+# ### Categorical Data Plot
+# The function allows to display the top and/or bottom values regarding their frequency in each column. Further, it gives an idea of the distribution of the values in the dataset. This plot comes in very handy during data analysis when considering changing datatypes to "category" or when planning to combine less frequent values into a seperate category before applying one-hot-encoding or similar functions.
+
+# %%
+klib.cat_plot(data, top=4, bottom=4) # representation of the 4 most & least common values in each categorical column
+
+# %%
+
+
+
